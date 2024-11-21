@@ -2,6 +2,7 @@ pub mod basic_auth;
 pub mod cors;
 pub mod gzip;
 pub mod logger;
+pub mod cache;
 
 use anyhow::Error;
 use futures::Future;
@@ -18,6 +19,7 @@ use self::basic_auth::make_basic_auth_middleware;
 use self::cors::make_cors_middleware;
 use self::gzip::make_gzip_compression_middleware;
 use self::logger::make_logger_middleware;
+use self::cache::make_cache_control_middleware;
 
 /// Middleware HTTP Response which expands to a `Arc<Mutex<http::Request<T>>>`
 pub type Request<T> = Arc<Mutex<http::Request<T>>>;
@@ -119,6 +121,9 @@ impl TryFrom<Arc<Config>> for Middleware {
                 middleware.after(make_gzip_compression_middleware());
             }
         }
+
+        let cache_control_middleware = make_cache_control_middleware(config.cache_control_max_age.clone());
+        middleware.after(cache_control_middleware);
 
         if let Some(should_log) = config.logger {
             if should_log {

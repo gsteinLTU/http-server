@@ -37,6 +37,7 @@ pub struct Config {
     pub logger: Option<bool>,
     pub proxy: Option<ProxyConfig>,
     pub graceful_shutdown: bool,
+    pub cache_control_max_age: Option<u32>,
 }
 
 impl Default for Config {
@@ -61,6 +62,7 @@ impl Default for Config {
             logger: None,
             proxy: None,
             graceful_shutdown: false,
+            cache_control_max_age: None,
         }
     }
 }
@@ -148,6 +150,7 @@ impl TryFrom<Cli> for Config {
             logger,
             proxy,
             graceful_shutdown: cli_arguments.graceful_shutdown,
+            cache_control_max_age: cli_arguments.cache_control_max_age,
         })
     }
 }
@@ -186,6 +189,7 @@ impl TryFrom<ConfigFile> for Config {
             logger: file.logger,
             proxy: file.proxy,
             graceful_shutdown: file.graceful_shutdown.unwrap_or(false),
+            cache_control_max_age: file.cache_control_max_age,
         })
     }
 }

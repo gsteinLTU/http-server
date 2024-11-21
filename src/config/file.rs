@@ -28,6 +28,7 @@ pub struct ConfigFile {
     pub logger: Option<bool>,
     pub proxy: Option<ProxyConfig>,
     pub graceful_shutdown: Option<bool>,
+    pub cache_control_max_age: Option<u32>,
 }
 
 impl ConfigFile {
